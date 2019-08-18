@@ -26,17 +26,17 @@ public class XmlStorageService implements StorageService {
 			marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To format XML
 			unmarshaller = jaxbContext.createUnmarshaller();
-			this.rootDirectory = getRootDirectory(path);
+			this.rootDirectory = StorageService.getRootDirectory(path);
 		} catch (JAXBException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public synchronized void persist(LanguageFile languageXmlFile) {
+	public synchronized void persist(LanguageFile languageFile) {
 		try {
-			marshaller.marshal(languageXmlFile, new File(rootDirectory.getAbsolutePath() + File.separator
-					+ DEFAULT_FILENAME + languageXmlFile.getLocale() + FILE_EXTENSION));
+			marshaller.marshal(languageFile, new File(rootDirectory.getAbsolutePath() + File.separator
+					+ DEFAULT_FILENAME + languageFile.getLocale() + FILE_EXTENSION));
 		} catch (JAXBException e) {
 			throw new RuntimeException(e);
 		}
@@ -61,17 +61,6 @@ public class XmlStorageService implements StorageService {
 				.filter(f -> f.getName().startsWith(DEFAULT_FILENAME))
 				.map(f -> f.getName().substring(DEFAULT_FILENAME.length(), f.getName().length() - 4))
 				.collect(Collectors.toList());
-	}
-
-	private static File getRootDirectory(String path) {
-		File directory = new File(path);
-		if (directory.isFile()) {
-			throw new RuntimeException("invalid path");
-		}
-		if (!directory.exists()) {
-			directory.mkdirs();
-		}
-		return directory;
 	}
 
 }
