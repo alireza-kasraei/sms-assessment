@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "9d7922ee-f9b1-43a8-9f2c-daab3168473e",
+		"name": "assessment-language",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create locale",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"locale\":\"EN\",\n\t\"language\":{\n\t\t\"id\":\"1\",\n\t\t\"content\":\"hello\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/locales",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"locales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add Entry",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"2\",\n\t\"content\":\"2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/languages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"languages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get languages",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/languages?locale=EN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"languages"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "EN"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit language",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"3\",\n\t\"content\":\"7777777777777777777\"\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/languages?locale=EN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"languages"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "EN"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete language",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/languages?locale=EN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"languages"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "EN"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "conflicts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/conflicts?locale=EN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"conflicts"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "EN"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
