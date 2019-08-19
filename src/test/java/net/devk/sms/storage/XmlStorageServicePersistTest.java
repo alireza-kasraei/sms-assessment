@@ -21,7 +21,7 @@ import org.xmlunit.diff.ElementSelectors;
 import net.devk.sms.language.model.Language;
 import net.devk.sms.language.model.LanguageFile;
 
-public class StorageServicePersistTest {
+public class XmlStorageServicePersistTest {
 
 	private static StorageService storageService;
 

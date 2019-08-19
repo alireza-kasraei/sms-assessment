@@ -28,13 +28,17 @@ public class LanguageServiceTest {
 	private StorageService storageService;
 
 	private static LanguageFile createEnLanguage() {
-		LanguageFile languageXmlFile = new LanguageFile();
-		languageXmlFile.setLocale("EN");
+		LanguageFile languageFile = new LanguageFile();
+		languageFile.setLocale("EN");
 		Language language = new Language();
 		language.setContent("hello");
 		language.setId("@hello@");
-		languageXmlFile.getLanguage().add(language);
-		return languageXmlFile;
+		Language language2 = new Language();
+		language2.setContent("hello2");
+		language2.setId("@hello2@");
+		languageFile.getLanguage().add(language);
+		languageFile.getLanguage().add(language2);
+		return languageFile;
 	}
 
 	private static LanguageFile createDuplicateEnLanguage() {
@@ -77,7 +81,7 @@ public class LanguageServiceTest {
 	public void testGetEnLocale() {
 		given(storageService.read(Mockito.anyString())).willReturn(createEnLanguage());
 		List<Language> languages = languageService.getLanguages("EN");
-		Assert.assertEquals(1, languages.size());
+		Assert.assertEquals(2, languages.size());
 	}
 
 	@Test(expected = InvalidLocaleFileException.class)
@@ -90,7 +94,7 @@ public class LanguageServiceTest {
 	public void testCreatNewList() {
 		given(storageService.read(Mockito.anyString())).willReturn(createEnLanguage());
 		List<Language> languages = languageService.createNewList("EN", "content", "id");
-		Assert.assertEquals(2, languages.size());
+		Assert.assertEquals(3, languages.size());
 	}
 
 	@Test
@@ -104,7 +108,7 @@ public class LanguageServiceTest {
 	public void testEditList() {
 		given(storageService.read(Mockito.anyString())).willReturn(createEnLanguage());
 		List<Language> languages = languageService.editList("EN", "new content", "@hello@");
-		Assert.assertEquals(1, languages.size());
+		Assert.assertEquals(2, languages.size());
 		Assert.assertEquals("new content", languages.get(0).getContent());
 	}
 
@@ -112,7 +116,7 @@ public class LanguageServiceTest {
 	public void testDeleteEntry() {
 		given(storageService.read(Mockito.anyString())).willReturn(createEnLanguage());
 		List<Language> languages = languageService.deleteList("EN", "@hello@");
-		Assert.assertEquals(0, languages.size());
+		Assert.assertEquals(1, languages.size());
 	}
 
 	@Test

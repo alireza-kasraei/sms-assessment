@@ -10,6 +10,11 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
+@Data
 @XmlRootElement(name = "languageXmlFile")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LanguageFile {
@@ -19,22 +24,7 @@ public class LanguageFile {
 	private List<Language> language = new LinkedList<>();
 
 	@XmlTransient
+	@JsonIgnore
 	private String locale;
-
-	public String getLocale() {
-		return locale;
-	}
-
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	public List<Language> getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(List<Language> language) {
-		this.language = language;
-	}
 
 }

@@ -2,6 +2,8 @@ package net.devk.sms.language;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +34,7 @@ public class LanguageController {
 	}
 
 	@PostMapping("/locales")
-	public ResponseEntity<?> createNewLocale(@RequestBody CreateNewLocale newLocale) {
+	public ResponseEntity<?> createNewLocale(@Valid @RequestBody CreateNewLocale newLocale) {
 		languageService.createLocale(newLocale.getLocale(), newLocale.getLanguage().getContent(),
 				newLocale.getLanguage().getId());
 		return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -121,6 +121,14 @@ public class LanguageControllerTest {
 				.content("{\"locale\":\"FA\",\"language\":{\"content\":\"hello\",\"id\":\"@hello@\"}}"))
 				.andExpect(status().isCreated());
 	}
+	
+	@Test
+	public void testCreateInvalidNewLocale() throws Exception {
+		doNothing().when(languageService).createLocale(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+		mockMvc.perform(post("/locales").contentType(MediaType.APPLICATION_JSON)
+				.content("{\"locale\":\"A\",\"language\":{\"content\":\"hello\",\"id\":\"@hello@\"}}"))
+		.andExpect(status().isBadRequest());
+	}
 
 	@Test
 	public void testGetUntranslated() throws Exception {

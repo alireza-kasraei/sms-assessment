@@ -1,24 +1,13 @@
 package net.devk.sms.language.dto;
 
+import lombok.Data;
+import net.devk.sms.language.dto.validator.Locale;
+
+@Data
 public class CreateNewLocale {
 
+	@Locale
 	private String locale;
 	private CreateOrUpdateLanguage language;
-
-	public String getLocale() {
-		return locale;
-	}
-
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	public CreateOrUpdateLanguage getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(CreateOrUpdateLanguage language) {
-		this.language = language;
-	}
 
 }

@@ -1,16 +1,19 @@
 package net.devk.sms.language;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.devk.sms.language.model.Language;
 import net.devk.sms.language.model.LanguageFile;
 import net.devk.sms.storage.StorageService;
 
+/**
+ * Default implementation of the {@link LanguageService}
+ */
 public class DefaultLanguageService implements LanguageService {
 
 	private StorageService storageService;
@@ -26,20 +29,23 @@ public class DefaultLanguageService implements LanguageService {
 
 	@Override
 	public List<Language> getLanguages(String locale) {
-		LanguageFile languageXmlFile = storageService.read(locale);
-		return languageXmlFile.getLanguage();
+		LanguageFile languageFile = storageService.read(locale);
+		return languageFile.getLanguage();
 	}
 
+	/**
+	 * Helper method for adding an entry to a list of languages
+	 * 
+	 * @param locale
+	 * @param content
+	 * @param id
+	 * @return
+	 */
 	public List<Language> createNewList(String locale, String content, String id) {
-		Language language = new Language();
-		if (content == null || content.isEmpty()) {
-			language.setContent(id);
-		} else {
-			language.setContent(content);
-		}
-		language.setId(id);
+
 		// finding languages
 		List<Language> languageList = getLanguages(locale);
+		Language language = createLanguage(id, content);
 		languageList.add(language);
 		return languageList;
 	}
@@ -49,12 +55,9 @@ public class DefaultLanguageService implements LanguageService {
 		List<Language> languageList = getLanguages(locale);
 		return languageList.stream().map(l -> {
 			if (l.getId().equals(id)) {
-				Language language = new Language();
-				language.setContent(content);
-				language.setId(id);
-				return language;
-			} else
-				return l;
+				return createLanguage(id, content);
+			}
+			return l;
 
 		}).collect(Collectors.toList());
 	}
@@ -73,11 +76,9 @@ public class DefaultLanguageService implements LanguageService {
 	}
 
 	private void persist(String locale, List<Language> languages) {
-		LanguageFile languageXmlFile = new LanguageFile();
-		languageXmlFile.setLocale(locale);
-		languageXmlFile.getLanguage().addAll(languages);
+		LanguageFile languageFile = createLanguageFile(locale, languages);
 		// persist pojo
-		storageService.persist(languageXmlFile);
+		storageService.persist(languageFile);
 	}
 
 	@Override
@@ -102,22 +103,16 @@ public class DefaultLanguageService implements LanguageService {
 	@Override
 	public void createLocale(String locale, String content, String id) {
 		List<String> currentLocales = getCurrentLocales();
-		Optional<String> optional = currentLocales.stream().filter(s -> s.equals(locale)).findAny();
-		if (optional.isPresent()) {
+		if (currentLocales.contains(locale)) {
 			throw new LocaleAlreadyExistsException();
 		}
-		Language language = new Language();
-		language.setContent(content);
-		language.setId(id);
-		List<Language> languages = new ArrayList<>();
-		languages.add(language);
-		persist(locale, languages);
+		persist(locale, Arrays.asList(createLanguage(id, content)));
 	}
 
 	@Override
 	public List<Language> getUntranslatedLanguages(String locale) {
 		List<Language> languages = getLanguages(locale);
-		return languages.stream().filter(l -> l.getContent().startsWith("@")).collect(Collectors.toList());
+		return languages.stream().filter(DefaultLanguageService::hasIdFormat).collect(Collectors.toList());
 	}
 
 	@Override
@@ -131,6 +126,32 @@ public class DefaultLanguageService implements LanguageService {
 	public void removeDuplicates(String locale) {
 		List<String> ids = getConflicts(locale);
 		ids.forEach(id -> deleteEntry(locale, id));
+	}
+
+	public static Language createLanguage(String id, String content) {
+		if (id == null || id.isEmpty())
+			throw new IllegalArgumentException("invalid id");
+		Language language = new Language();
+		if (content == null || content.isEmpty()) {
+			language.setContent(id);
+		} else {
+			language.setContent(content);
+		}
+		language.setId(id);
+		language.setLastModifiedDate(new Date());
+		return language;
+	}
+
+	private static LanguageFile createLanguageFile(String locale, List<Language> languages) {
+		LanguageFile languageFile = new LanguageFile();
+		languageFile.setLocale(locale);
+		languageFile.getLanguage().addAll(languages);
+		return languageFile;
+	}
+
+	public static boolean hasIdFormat(Language language) {
+		String content = language.getContent();
+		return (content.startsWith("@") && (content.charAt(content.length() - 1) == '@'));
 	}
 
 }

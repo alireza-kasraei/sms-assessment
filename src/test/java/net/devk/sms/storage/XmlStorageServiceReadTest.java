@@ -14,14 +14,14 @@ import org.junit.Test;
 
 import net.devk.sms.language.model.LanguageFile;
 
-public class StorageServiceReadTest {
+public class XmlStorageServiceReadTest {
 
 	private static StorageService storageService;
 	private static File rootDirectory = null;
 
 	@BeforeClass
 	public static void init() throws IOException, URISyntaxException {
-		ClassLoader classLoader = StorageServiceReadTest.class.getClassLoader();
+		ClassLoader classLoader = XmlStorageServiceReadTest.class.getClassLoader();
 		//finding test-classes directory from class loader
 		URL resource = classLoader.getResource(".");
 		rootDirectory = new File(resource.toURI());
